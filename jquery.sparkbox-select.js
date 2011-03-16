@@ -1,10 +1,12 @@
 (function($) {
   $.fn.sbCustomSelect = function(options) {
     var iOS = (navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i)) || (navigator.userAgent.match(/iPad/i)),
+        android = (navigator.userAgent.match(/Android/i)),
         UP = 38,
         DOWN = 40,
         SPACE = 32,
         RETURN = 13,
+        TAB = 9,
         matchString = '';
 
     var updateSelect = function() {
@@ -52,9 +54,7 @@
     
     var viewList = function() {
       var $this = $(this);
-      //console.log('focus');
       if ($this.is(':hidden')) {
-       // console.log('  hidden');
         $this.parent().fadeIn('fast');
       }
     };
@@ -90,51 +90,48 @@
       
       if (e.keyCode >= 48 && e.keyCode <= 90) {
         matchString += String.fromCharCode(e.keyCode);
-        console.log(e.keyCode + " : " + String.fromCharCode(e.keyCode));
         checkforMatch(e);
       }
+      
+      if (e.keyCode == TAB && $current.is(':visible')) {
+        e.preventDefault();
+        $current.trigger('click');
+        hideDropdown(e);
+      }
+      
+      // if (e.keyCode == TAB && e.shiftKey && $current.is(':hidden')) {
+      //   e.preventDefault();
+      //   $this.prev().prev().focus();
+      // }
+      
     };
     
     var checkforMatch = function(e) {
       
       var re = '/' + matchString + '.*/';
       
-      $(e.target).siblings('ul').children().each(function() {
-        if (this.innerText.toUpperCase().indexOf(matchString) === 0) {
-          $(this).children().trigger('click');
+      $(e.target).siblings('ul').find('a').each(function() {
+        if (this.innerHTML.toUpperCase().indexOf(matchString) === 0) {
+          $(this).trigger('click');
           return;
         }
       });
     };
     
-    var origSelectFocus = function() {
-     // console.log('shift focus');
-      clear();
-      $(this).next().focus();
-    };
-    
     var clear = function() {
       matchString = '';
-      console.log('clear');
     };
-    // $('*').focus(function() {
-    //   console.log(this.nodeName + ' : ' + $(this).attr('id'));
-    // });
-    // 
-    // $('select').change(function() {
-    //   console.log(this.value);
-    // });
-    
     
     this.each(function() {
       var $self = $(this);
 
-      $self.wrap('<div class="sb-custom"/>')
+      $self.attr('tabindex', -1)
+        .wrap('<div class="sb-custom"/>')
         .after('<input type="text" class="sb-select" readonly="readonly" />')
         .bind('change', updateSelect);
        
-      if (iOS) {
-        $self.css({
+      if (iOS || android) {
+        $self.show().css({
           'opacity': 0,
           'position': 'relative',
           'z-index': 1000
@@ -143,15 +140,12 @@
         $self.next().after(createDropdown($self));
         $self.next().bind('click', selectAction);
       }
-      
+
       $self.trigger('change');
-      
     });
     
     $(document).bind('click', hideDropdown);
-    
-    $('.sb-custom').find('select').bind('focus', origSelectFocus);
-    
+
     $('.sb-custom').find('.sb-select').live('keydown', selectKeypress);
     
     $('.sb-custom').bind('blur', clear);

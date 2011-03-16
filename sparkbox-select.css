@@ -5,6 +5,10 @@
   position: relative;
   width:  100%;
 }
+select {
+  display: none;
+  width: 235px;
+}
 .sb-select:focus {
   -webkit-box-shadow: 0 0 4px 2px #79aed7;
      -moz-box-shadow: 0 0 4px 2px #79aed7;
@@ -24,8 +28,6 @@
 .sb-dropdown {
   background: white;
   -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, .2), inset 0px 6px 8px -8px rgba(0, 0, 0, .5);
-     -moz-box-shadow: 0 0 4px rgba(0, 0, 0, .2), inset 0px 6px 8px -8px rgba(0, 0, 0, .5);
-          box-shadow: 0 0 4px rgba(0, 0, 0, .2), inset 0px 6px 8px -8px rgba(0, 0, 0, .5);
   display: none;
   font-size: .8em;
   left: 5px;
