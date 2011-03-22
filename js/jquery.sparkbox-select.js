@@ -13,7 +13,7 @@
           
       $sbSelect.val(this[this.selectedIndex].innerHTML);
       
-      $dropdown.children().remove('selected')
+      $dropdown.children().removeClass('selected')
         .filter(':contains(' + this[this.selectedIndex].innerHTML + ')').addClass('selected');
     };
     

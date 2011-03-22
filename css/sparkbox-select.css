@@ -1,14 +1,16 @@
 .sb-custom {
   cursor: pointer;
   display: inline;
-  float: left;
   position: relative;
   width:  100%;
 }
-select {
+.sparkbox-custom {
   display: none;
-  width: 235px;
 }
+.no-js .sparkbox-custom {
+  display: block;
+}
+
 .sb-select:focus {
   -webkit-box-shadow: 0 0 4px 2px #79aed7;
      -moz-box-shadow: 0 0 4px 2px #79aed7;
@@ -20,7 +22,7 @@ select {
   color: #444;
   left: 0;
   padding: 5px 30px 5px 5px;
-  position: absolute;
+  position: relative;
   text-decoration: none;
   top: 0;
   width: 200px;
@@ -29,13 +31,16 @@ select {
 .sb-dropdown {
   background: white;
   -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, .2), inset 0px 6px 8px -8px rgba(0, 0, 0, .5);
+     -moz-box-shadow: 0 0 4px rgba(0, 0, 0, .2), inset 0px 6px 8px -8px rgba(0, 0, 0, .5);
+          box-shadow: 0 0 4px rgba(0, 0, 0, .2), inset 0px 6px 8px -8px rgba(0, 0, 0, .5);
   display: none;
   font-size: .9em;
   left: 5px;
   list-style: none;
+  margin: 0;
   padding: 5px;
-  position: relative;
-  top: .7em;
+  position: absolute;
+  top: 1.35em;
   width: 200px;
   z-index: 0;
 }

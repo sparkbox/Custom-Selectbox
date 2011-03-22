@@ -25,3 +25,20 @@ This is a UI replacement for default select boxes that leaves mobile browsers (i
     <script>
       ('.sparkbox-custom').sbCustomSelect();
     </script>
+    
+    
+##Tested in##
+###Mac###
+- Chrome 10
+- Safari 5.0.3
+- Firefox 3.6
+- Firefox 4
+
+###Windows###
+- Chrome 10
+- Firefox 3.6
+- Firefox 4
+- Opera 11
+- IE 8
+- IE 7
+- IE 6
