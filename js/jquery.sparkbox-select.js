@@ -139,8 +139,10 @@
       
       if (iOS || android) {
         $self.show().css({
+          'display': 'block',
           'opacity': 0,
-          'position': 'relative',
+          'position': 'absolute',
+          'width': '100%',
           'z-index': 1000
         });
       } else {
