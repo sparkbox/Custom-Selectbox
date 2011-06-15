@@ -35,7 +35,8 @@
           $dropdown = $('<ul class="sb-dropdown"/>');
       
       $options.each(function() {
-        $dropdown.append('<li><a href=".">' + $(this).text() + '</a></li>');
+        var className = this.className ? ' class="' + this.className + '"' : ''; 
+        $dropdown.append('<li' + className + '><a href=".">' + $(this).text() + '</a></li>');
       });
       $dropdown.bind('click', dropdownSelection);
       
