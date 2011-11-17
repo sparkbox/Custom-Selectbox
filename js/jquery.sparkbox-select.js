@@ -11,12 +11,11 @@
 			$dropdown = $select.siblings('.sb-dropdown'),
 			$sbSelect = $select.siblings('.sb-select');
 
-		$sbSelect.val($select.val());
 		$dropdown.find('li')
 			.removeClass('selected')
-			.filter('[data-value="'+selectorEscape($select.val())+'"')
+			.filter('[data-value="'+selectorEscape($select.val())+'"]')
 				.addClass('selected');
-
+		$sbSelect.val($dropdown.find('li.selected').text());
 	};
 
 
@@ -128,8 +127,8 @@
     };
 
 
-	var selectorEscape = function (val) {
-		return val.toString().replace(/([ #;&,.+*~':"%!^$[\]\(\)=>|\/])/g, '\\\\$1');
+	var selectorEscape = function (attr) {
+		return attr.toString().replace(/([ #;&,.+*~':"%!^$[\]\(\)=>|\/])/g, '\\\\$1');
 	};
 
 
