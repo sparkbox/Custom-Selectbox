@@ -46,16 +46,18 @@
     // Clear keystroke matching string and show dropdown
     var viewList = function(e) {
       var $this = $(this);
+      
+
+      
       clear();
 
       $this.closest('.sb-custom').find('.sb-dropdown').fadeIn('fast');
-      
       e.preventDefault();
     };
     
     // Hide the custom dropdown
     var hideDropdown = function(e) {
-      if (!$(e.target).closest('.sb-custom').length) {
+      if (!$(e.target).closest('.sb-custom').length || e.type == 'mouseleave') {
         $('.sb-dropdown').fadeOut('fast');
       } 
     };
@@ -157,9 +159,14 @@
     // Hide dropdown when click is outside of the input or dropdown
     $(document).bind('click', hideDropdown);
     
+    // Mouse Out
+    $('.sb-dropdown').bind('mouseleave', hideDropdown);
+    
     $('.sb-custom').find('.sb-select').live('keydown', selectKeypress);
     $('.sb-custom').bind('blur', clear);
     $('.sb-dropdown').live('focus', viewList);
+    
+
     
     return this;
   };
