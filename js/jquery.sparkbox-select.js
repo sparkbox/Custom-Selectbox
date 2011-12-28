@@ -1,5 +1,5 @@
 (function($) {
-  $.fn.sbCustomSelect = function(options) {
+  $.fn.sbCustomSelect = function() {
     var iOS = (navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i)) || (navigator.userAgent.match(/iPad/i)),
         android = (navigator.userAgent.match(/Android/i)),
         UP = 38, DOWN = 40, SPACE = 32, RETURN = 13, TAB = 9,
@@ -9,11 +9,12 @@
     var updateSelect = function () {
 		var $select = $(this),
 			$dropdown = $select.siblings('.sb-dropdown'),
-			$sbSelect = $select.siblings('.sb-select');
+			$sbSelect = $select.siblings('.sb-select'),
+			val = $select.val();
 
 		$dropdown.find('li')
 			.removeClass('selected')
-			.filter('[data-value="'+selectorEscape($select.val())+'"]')
+			.filter('[data-value="'+selectorEscape(val === null ? '' : val)+'"]')
 				.addClass('selected');
 		$sbSelect.val($dropdown.find('li.selected').text());
 	};
@@ -25,12 +26,14 @@
     var dropdownSelection = function (e) {
 		var $target = $(e.target),
 			$select = $target.closest('.sb-custom').find('select');
-		
+
 		e.preventDefault();
 
 		$target.closest('ul').fadeOut('fast');
-		$select.val($target.closest('li').attr('data-value'));
-		$select.trigger('change');
+		var val = $target.closest('li').attr('data-value');
+		if($select.val() != val) {
+			$select.val(val).trigger('change');
+		}
 	};
 
 
@@ -42,15 +45,22 @@
 
 		$options.each(function () {
 			var $this = $(this),
-				$li = $('<li><a href=".">'+$this.text()+'</a></li>');
+				$li = $('<li><a href="javascript:;">'+$this.text()+'</a></li>');
 
 			$li.attr('class', $this.attr('class'));
 			$li.attr('data-value', $this.attr('value'));
-			
+			if($this.is(':selected')) {
+				$li.addClass('selected');
+			}
+
 			$dropdown.append($li);
 		});
 
 		$dropdown.bind('click', dropdownSelection);
+
+//		$dropdown.bind('sb-update', function (e, val) {
+//			$dropdown.find('li[data-value="'+val+'"]').trigger('click');
+//		});
 
 		return $dropdown;
 	};
@@ -147,12 +157,15 @@
 */
     this.each(function() {
       var $self = $(this);
+	  if($self.closest('.sb-custom').length > 0) { return; }
 
       $self.attr('tabindex', -1)
         .wrap('<div class="sb-custom"/>')
+        .before('<div class="overlay_button"></div>')
         .after('<input type="text" class="sb-select" readonly="readonly" />')
         .bind('change', updateSelect);
 
+	  $(".overlay_button").bind('click', viewList);
 
       if (iOS || android) {
         $self.show().css({
@@ -167,7 +180,7 @@
         $self.next().bind('click', viewList).after(createDropdown($self));
       }
 
-      $self.trigger('change');
+      updateSelect.call(this);
     });
 
     // Hide dropdown when click is outside of the input or dropdown
