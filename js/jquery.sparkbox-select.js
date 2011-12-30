@@ -14,8 +14,9 @@
 
 		$dropdown.find('li')
 			.removeClass('selected')
-			.filter('[data-value="'+selectorEscape(val === null ? '' : val)+'"]')
-				.addClass('selected');
+			.filter(function () {
+				return $(this).attr('data-value') == val;
+			}).addClass('selected');
 		$sbSelect.val($dropdown.find('li.selected').text());
 	};
 
@@ -131,12 +132,6 @@
     var clear = function() {
       matchString = '';
     };
-
-
-	var selectorEscape = function (attr) {
-		return attr.toString().replace(/([ #;&,.+*~':"%!^$[\]\(\)=>|\/])/g, '\\\\$1');
-	};
-
 
 
     /* jQuery Plugin Loop
