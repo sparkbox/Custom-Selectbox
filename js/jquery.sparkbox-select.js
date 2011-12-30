@@ -58,10 +58,6 @@
 
 		$dropdown.bind('click', dropdownSelection);
 
-//		$dropdown.bind('sb-update', function (e, val) {
-//			$dropdown.find('li[data-value="'+val+'"]').trigger('click');
-//		});
-
 		return $dropdown;
 	};
 
@@ -186,8 +182,8 @@
     // Hide dropdown when click is outside of the input or dropdown
     $(document).bind('click', hideDropdown);
 
-    $('.sb-custom').find('.sb-select').live('keydown', selectKeypress);
-    $('.sb-custom').bind('blur', clear);
+    $('.sb-custom .sb-select').live('keydown', selectKeypress);
+    $('.sb-custom').live('blur', clear);
     $('.sb-dropdown').live('focus', viewList);
 
     return this;
