@@ -1,5 +1,7 @@
 $(document).ready(function() {
   
-  $('.sparkbox-custom').sbCustomSelect();
+  $('.sparkbox-custom').sbCustomSelect({
+    appendTo: 'body'
+  });
   
 });

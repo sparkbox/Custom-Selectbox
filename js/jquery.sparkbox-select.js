@@ -1,26 +1,34 @@
 (function($) {
+  var selectboxCounter = 0;
+  
   $.fn.sbCustomSelect = function(options) {
     var iOS = (navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i)) || (navigator.userAgent.match(/iPad/i)),
         android = (navigator.userAgent.match(/Android/i)),
         UP = 38, DOWN = 40, SPACE = 32, RETURN = 13, TAB = 9,
-        matchString = '';
+        matchString = '',
+        settings = $.extend({
+          appendTo: false
+        }, options);
 
     // Sync custom display with original select box and set selected class and the correct <li>
     var updateSelect = function() {
       var $this = $(this),
-          $dropdown = $this.siblings('.sb-dropdown'),
+          $dropdown = $('.sb-dropdown[data-id=' + $this.parent().data('id') + ']'),
           $sbSelect = $this.siblings('.sb-select');
-          
-      $sbSelect.val(this[this.selectedIndex].innerHTML);
       
-      $dropdown.children().removeClass('selected')
-        .filter(':contains(' + this[this.selectedIndex].innerHTML + ')').addClass('selected');
+      if (this.selectedIndex != -1) {
+        $sbSelect.val(this[this.selectedIndex].innerHTML);
+      
+        $dropdown.children().removeClass('selected')
+          .filter(':contains(' + this[this.selectedIndex].innerHTML + ')').addClass('selected');
+      }
     };
     
     // Update original select box, hide <ul>, and fire change event to keep everything in sync
     var dropdownSelection = function(e) {
       var $target = $(e.target),
-          $option = $target.closest('.sb-custom').find('option').filter(':contains(' + $target.text() + ')');
+          id = $target.closest('ul').attr('data-id'),
+          $option = $('.sb-custom[data-id=' + id + ']').find('option').filter('[value="' + $target.parent().data('value') + '"]');
           
       e.preventDefault();
       
@@ -30,12 +38,13 @@
     };
     
     // Create the <ul> that will be used to change the selection on a non iOS/Android browser
-    var createDropdown = function($select) {
+    var createDropdown = function($select, i) {
       var $options = $select.children(),
-          $dropdown = $('<ul class="sb-dropdown"/>');
+          $dropdown = $('<ul data-id="' + i + '" class="sb-dropdown"/>');
       
       $options.each(function() {
-        $dropdown.append('<li><a href=".">' + $(this).text() + '</a></li>');
+        $this = $(this);
+        $dropdown.append('<li data-value="' + $this.val() + '"><a href=".">' + $this.text() + '</a></li>');
       });
       $dropdown.bind('click', dropdownSelection);
       
@@ -44,10 +53,12 @@
     
     // Clear keystroke matching string and show dropdown
     var viewList = function(e) {
-      var $this = $(this);
-      clear();
-
-      $this.closest('.sb-custom').find('.sb-dropdown').fadeIn('fast');
+      var $this = $(this),
+          id = $this.data('id');
+          
+      clearKeyStrokes();
+      
+      $('.sb-dropdown').fadeOut('fast').filter('[data-id=' + id + ']').fadeIn('fast');
       
       e.preventDefault();
     };
@@ -56,13 +67,17 @@
     var hideDropdown = function(e) {
       if (!$(e.target).closest('.sb-custom').length) {
         $('.sb-dropdown').fadeOut('fast');
-      } 
+      }
     };
     
     // Manage keypress to replicate browser functionality
     var selectKeypress = function(e) {
       var $this = $(this),
-          $current = $this.siblings('ul').find('.selected');
+          $current = $('.sb-dropdown[data-id=' + $this.data('id') + ']').find('.selected');
+          
+          
+      // if ($('.sb-dropdown[data-id=' + $this.data('id') + ']').find('.selected') || $('.sb-dropdown[data-id=' + $this.data('id') + ']');
+          // $this.siblings('ul').find('.selected');
       
       if ((e.keyCode == UP || e.keyCode == DOWN || e.keyCode == SPACE) && $current.is(':hidden')) {
         $current.focus();
@@ -110,7 +125,7 @@
     };
     
     // Clear the string used for matching keystrokes to select options
-    var clear = function() {
+    var clearKeyStrokes = function() {
       matchString = '';
     };
     
@@ -132,14 +147,15 @@
       var $self = $(this);
 
       $self.attr('tabindex', -1)
-        .wrap('<div class="sb-custom"/>')
-        .after('<input type="text" class="sb-select" readonly="readonly" />')
+        .wrap('<div data-id="' + selectboxCounter + '" class="sb-custom"/>')
+        .after('<input data-id="' + selectboxCounter + '" type="text" class="sb-select" readonly="readonly" />')
         .bind('change', updateSelect);
       
       
       if (iOS || android) {
         $self.show().css({
           'display': 'block',
+          'height': $self.next().innerHeight(),
           'opacity': 0,
           'position': 'absolute',
           'width': '100%',
@@ -147,18 +163,31 @@
         });
       } else {
         
-        $self.next().bind('click', viewList).after(createDropdown($self));
+        $self.next().bind('click', viewList);
+        
+        if (!settings.appendTo) {
+          $self.after(createDropdown($self, selectboxCounter));
+        } else {
+          var offset = $self.parent().offset();
+          
+          $(settings.appendTo).append(createDropdown($self, selectboxCounter).css({
+            'top': offset.top,
+            'left': offset.left,
+            'width': $self.parent().width() * 0.8
+          }));
+        }
       }
 
       $self.trigger('change');
+      selectboxCounter++;
     });
     
     // Hide dropdown when click is outside of the input or dropdown
     $(document).bind('click', hideDropdown);
     
     $('.sb-custom').find('.sb-select').live('keydown', selectKeypress);
-    $('.sb-custom').bind('blur', clear);
-    $('.sb-dropdown').live('focus', viewList);
+    $('.sb-custom').bind('blur', clearKeyStrokes);
+    $(document).delegate('.sb-dropdown', 'focus', viewList);
     
     return this;
   };

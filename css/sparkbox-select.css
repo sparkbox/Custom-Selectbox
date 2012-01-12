@@ -42,7 +42,7 @@
   position: absolute;
   top: 1.35em;
   width: 200px;
-  z-index: 0;
+  z-index: 2;
 }
 .sb-dropdown a {
   color: #444;

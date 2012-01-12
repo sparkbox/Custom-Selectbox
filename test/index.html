@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>QUnit Tests</title>
+	<link rel="stylesheet" href="qunit/qunit.css" media="screen">
+	<link rel="stylesheet" href="../css/sparkbox-select.css" media="screen">
+
+  <style>
+    .select-container {
+      position: absolute;
+      left: -99999em;
+    }
+  </style>
+
+<!-- reference your own javascript files here -->
+
+  <script src="../js/modernizr-1.7.min.js"></script>
+  
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+  <script src="../js/jquery.sparkbox-select.js"></script>
+
+<!-- test runner files -->
+	<script src="qunit/qunit.js"></script>
+	<script src="tests.js"></script>
+
+
+
+</head>
+<body class="flora">
+  <div class="select-container">
+    <form>
+      <select id="browsers" class="sparkbox-custom">
+        <option class="google" value="the_googs">Chrome</option>
+        <option class="apple" value="the_faris">Safari</option>
+        <option class="mozilla" value="foxfire">Firefox</option>
+        <option class="microsoft" value="the_splora 7">IE 7</option>
+        <option class="microsoft" value="the_splora 8">IE 8</option>
+        <option class="microsoft" value="the_splora 9">IE 9</option>
+        <option class="microsoft" value="the_splora 10">IE 10</option>
+      </select>
+      <input type="submit"/>
+    </form>
+    
+    <form>
+      <select id="solo" class="sparkbox-custom">
+        <option value="uno">Solo</option>
+      </select>
+      <input type="submit"/>
+    </form>
+    
+    <form>
+      <select id="empty" class="sparkbox-custom">
+      </select>
+      <input type="submit"/>
+    </form>
+  </div>
+	<h1 id="qunit-header">QUnit Test Suite</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+	<div id="qunit-fixture">test markup</div>
+	</body>
+</html>
