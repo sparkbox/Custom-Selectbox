@@ -57,8 +57,9 @@
           id = $this.data('id');
           
       clearKeyStrokes();
-      
-      $('.sb-dropdown').fadeOut('fast').filter('[data-id=' + id + ']').fadeIn('fast');
+
+      $('.sb-dropdown').filter('[data-id!=' + id + ']').fadeOut('fast');
+      $('.sb-dropdown').filter('[data-id=' + id + ']').fadeIn('fast');
       
       e.preventDefault();
     };
