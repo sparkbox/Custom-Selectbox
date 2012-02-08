@@ -150,7 +150,7 @@
       $self.attr('tabindex', -1)
         .wrap('<div data-id="' + selectboxCounter + '" class="sb-custom"/>')
         .after('<input data-id="' + selectboxCounter + '" type="text" class="sb-select" readonly="readonly" />')
-        .bind('change', updateSelect);
+        .bind('change sb-sync', updateSelect);
       
       
       if (iOS || android) {
@@ -179,7 +179,7 @@
         }
       }
 
-      $self.trigger('change');
+      $self.trigger('sb-sync');
       selectboxCounter++;
     });
     
