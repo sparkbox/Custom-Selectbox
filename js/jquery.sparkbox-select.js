@@ -15,7 +15,7 @@
       var $this = $(this),
           $dropdown = $('.sb-dropdown[data-id=' + $this.parent().data('id') + ']'),
           $sbSelect = $this.siblings('.sb-select');
-      
+
       if (this.selectedIndex != -1) {
         $sbSelect.val(this[this.selectedIndex].innerHTML);
       
@@ -70,59 +70,61 @@
         $('.sb-dropdown').fadeOut('fast');
       }
     };
-    
+
     // Manage keypress to replicate browser functionality
     var selectKeypress = function(e) {
       var $this = $(this),
           $current = $('.sb-dropdown[data-id=' + $this.data('id') + ']').find('.selected');
-          
-          
-      // if ($('.sb-dropdown[data-id=' + $this.data('id') + ']').find('.selected') || $('.sb-dropdown[data-id=' + $this.data('id') + ']');
-          // $this.siblings('ul').find('.selected');
-      
-      if ((e.keyCode == UP || e.keyCode == DOWN || e.keyCode == SPACE) && $current.is(':hidden')) {
-        $current.focus();
-        return;
+
+      //select in dropdown if it's open... else directly change select value to target element
+      function softSelect(el) {
+          if($current.is(':hidden')) $(el).children('a').trigger('click');
+          else {
+            $current.removeClass('selected');
+            $(el).addClass('selected');
+          }
       }
-      
-      if (e.keyCode == UP && $current.prev().length) {
-        e.preventDefault();
-        $current.removeClass('selected');
-        $current.prev().addClass('selected');
-      } else if (e.keyCode == DOWN && $current.next().length) {
-        e.preventDefault();
-        $current.removeClass('selected');
-        $current.next().addClass('selected');
-      }
-      
-      if (e.keyCode == RETURN || e.keyCode == SPACE) {
-        $current.children('a').trigger('click');
-        return;
-      }
-      
+
       if (e.keyCode >= 48 && e.keyCode <= 90) {
         matchString += String.fromCharCode(e.keyCode);
-        checkforMatch(e);
-      }
-      
-      if (e.keyCode == TAB && $current.is(':visible')) {
-        e.preventDefault();
-        $current.trigger('click');
-        hideDropdown(e);
-      }
-    };
-    
-    // Check keys pressed to see if there is a text match with one of the options
-    var checkforMatch = function(e) {
-      
-      var re = '/' + matchString + '.*/';
-      
-      $(e.target).siblings('ul').find('a').each(function() {
-        if (this.innerHTML.toUpperCase().indexOf(matchString) === 0) {
-          $(this).trigger('click');
-          return;
+
+        var matches = [],
+            matchFirstChar = false;
+
+        if(!matchString.replace(new RegExp(matchString[0],"g"), '').length) matchFirstChar = true;
+
+        $current.siblings('li').andSelf().children('a').each(function() {
+            if (this.innerHTML.toUpperCase().indexOf(matchFirstChar ? matchString[0] : matchString) === 0) {
+                matches.push(this);
+            }
+        });
+        if (matches.length) {
+            if(matchFirstChar) {
+                softSelect($(matches[($(matches).index($current.find('a'))+1)%matches.length]).parent());
+            }
+            else softSelect($(matches[0]).parent());
         }
-      });
+      } else clearKeyStrokes();
+
+      if ((e.keyCode == RETURN || e.keyCode == SPACE) && $current.is(':hidden')) {
+        $current.focus();
+        e.preventDefault();
+        return;
+      }
+
+      if (e.keyCode == UP && $current.prev().length) {
+        e.preventDefault();
+        softSelect($current.prev());
+      } else if (e.keyCode == DOWN && $current.next().length) {
+        e.preventDefault();
+        softSelect($current.next());
+      }
+
+      if ((e.keyCode == TAB  && $current.is(':visible')) || e.keyCode == RETURN || e.keyCode == SPACE) {
+        $current.children('a').trigger('click');
+        e.preventDefault();
+        return;
+      }
     };
     
     // Clear the string used for matching keystrokes to select options
