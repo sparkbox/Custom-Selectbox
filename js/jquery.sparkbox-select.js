@@ -138,6 +138,7 @@
       }
 
       function nextPage(elements) {
+        $current.parent().show();
         var targetDistance = $current.parent().innerHeight()-($current.outerHeight()*2),
             distance = 0,
             $target = $(elements).last();
@@ -149,21 +150,29 @@
                 return false;
             }
         });
+        $current.parent().hide();
         softSelect($target);
       }
 
-      if ((e.keyCode == UP || e.keyCode == LEFT) && $current.prev().length) {
-        e.preventDefault();
-        softSelect($current.prev());
-      } else if ((e.keyCode == DOWN || e.keyCode == RIGHT) && $current.next().length) {
-        e.preventDefault();
-        softSelect($current.next());
-      } else if(e.keyCode == PGUP) {
-        e.preventDefault();
-        nextPage($current.prevAll());
-      } else if(e.keyCode == PGDOWN) {
-        e.preventDefault();
-        nextPage($current.nextAll());
+      switch (e.keyCode) {
+          case UP:
+          case LEFT:
+              e.preventDefault();
+              if($current.prev().length) softSelect($current.prev());
+              break;
+          case RIGHT:
+          case DOWN:
+              e.preventDefault();
+              if($current.next().length) softSelect($current.next());
+              break;
+          case PGUP:
+              e.preventDefault();
+              nextPage($current.prevAll());
+              break;
+          case PGDOWN:
+              e.preventDefault();
+              nextPage($current.nextAll());
+              break;
       }
 
       if ((e.keyCode == TAB  && $current.is(':visible')) || e.keyCode == RETURN || e.keyCode == SPACE || e.keyCode == ESC) {
