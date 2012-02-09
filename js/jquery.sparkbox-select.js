@@ -159,9 +159,11 @@
         e.preventDefault();
         softSelect($current.next());
       } else if(e.keyCode == PGUP) {
-          nextPage($current.prevAll());
+        e.preventDefault();
+        nextPage($current.prevAll());
       } else if(e.keyCode == PGDOWN) {
-          nextPage($current.nextAll());
+        e.preventDefault();
+        nextPage($current.nextAll());
       }
 
       if ((e.keyCode == TAB  && $current.is(':visible')) || e.keyCode == RETURN || e.keyCode == SPACE || e.keyCode == ESC) {
