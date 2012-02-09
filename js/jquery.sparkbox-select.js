@@ -4,7 +4,7 @@
   $.fn.sbCustomSelect = function(options) {
     var iOS = (navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i)) || (navigator.userAgent.match(/iPad/i)),
         android = (navigator.userAgent.match(/Android/i)),
-        LEFT = 37, UP = 38, RIGHT = 39, DOWN = 40, SPACE = 32, RETURN = 13, TAB = 9, ESC = 27,
+        LEFT = 37, UP = 38, RIGHT = 39, DOWN = 40, SPACE = 32, RETURN = 13, TAB = 9, ESC = 27, PGUP = 33, PGDOWN = 34,
         matchString = '',
         settings = $.extend({
           appendTo: false
@@ -137,12 +137,31 @@
         return;
       }
 
+      function nextPage(elements) {
+        var targetDistance = $current.parent().innerHeight()-($current.outerHeight()*2),
+            distance = 0,
+            $target = $(elements).last();
+
+        elements.each(function() {
+            if(distance < targetDistance) distance += $(this).outerHeight();
+            else {
+                $target = $(this);
+                return false;
+            }
+        });
+        softSelect($target);
+      }
+
       if ((e.keyCode == UP || e.keyCode == LEFT) && $current.prev().length) {
         e.preventDefault();
         softSelect($current.prev());
       } else if ((e.keyCode == DOWN || e.keyCode == RIGHT) && $current.next().length) {
         e.preventDefault();
         softSelect($current.next());
+      } else if(e.keyCode == PGUP) {
+          nextPage($current.prevAll());
+      } else if(e.keyCode == PGDOWN) {
+          nextPage($current.nextAll());
       }
 
       if ((e.keyCode == TAB  && $current.is(':visible')) || e.keyCode == RETURN || e.keyCode == SPACE || e.keyCode == ESC) {
