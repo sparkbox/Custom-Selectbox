@@ -96,7 +96,7 @@
       }
       
       if (e.keyCode == RETURN || e.keyCode == SPACE) {
-        $current.trigger('click');
+        $current.children('a').trigger('click');
         return;
       }
       
