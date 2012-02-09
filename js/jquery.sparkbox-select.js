@@ -54,11 +54,11 @@
 
       var id = $target.parent().attr('data-id'),
           $option = $('.sb-custom[data-id=' + id + ']').find('option').filter('[value="' + $target.data('value') + '"]');
-      
+
       $option[0].selected = true;
       if(!preventClose) {
           hideDropdown({});
-          $option.parent().trigger('change');
+          if($option.parent().data('lastVal') != $option.parent().val()) $option.parent().data('lastVal', $option.parent().val()).trigger('change');
       } else $option.trigger('sb-sync');
     };
     
@@ -225,6 +225,7 @@
         }
       }
 
+      $self.data('lastVal', $self.val());
       $self.trigger('sb-sync');
       selectboxCounter++;
     });
