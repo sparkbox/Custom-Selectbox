@@ -4,7 +4,7 @@
   $.fn.sbCustomSelect = function(options) {
     var iOS = (navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i)) || (navigator.userAgent.match(/iPad/i)),
         android = (navigator.userAgent.match(/Android/i)),
-        UP = 38, DOWN = 40, SPACE = 32, RETURN = 13, TAB = 9,
+        UP = 38, DOWN = 40, SPACE = 32, RETURN = 13, TAB = 9, ESC = 27,
         matchString = '',
         settings = $.extend({
           appendTo: false
@@ -120,7 +120,7 @@
         softSelect($current.next());
       }
 
-      if ((e.keyCode == TAB  && $current.is(':visible')) || e.keyCode == RETURN || e.keyCode == SPACE) {
+      if ((e.keyCode == TAB  && $current.is(':visible')) || e.keyCode == RETURN || e.keyCode == SPACE || e.keyCode == ESC) {
         $current.children('a').trigger('click');
         e.preventDefault();
         return;
