@@ -10,6 +10,27 @@
           appendTo: false
         }, options);
 
+    var scrollToSelected = function() {
+        var $selected = $('.sb-dropdown:visible li.selected');
+        if(!$selected.length) return true;
+
+        //recover scroll position (after fadeOut)
+        if($selected.parent().data('sb-saved-scrollTo')) $selected.parent().scrollTop($selected.parent().data('sb-saved-scrollTo'));
+
+        //we can't just use $selected.position().top, if the sb-dropdown is positioned static -.-
+        var scrollTop = $selected.parent().scrollTop(),
+        offset = ($selected.offset().top+scrollTop-$selected.parent().offset().top);
+
+        if(offset < scrollTop) {
+            $selected.parent().scrollTop(offset);
+            $selected.parent().data('sb-saved-scrollTo', offset)
+        } else if($selected.parent().innerHeight()+scrollTop < offset+$selected.outerHeight()) {
+            var scrollTo = offset+$selected.outerHeight()-$selected.parent().innerHeight();
+            $selected.parent().scrollTop(scrollTo);
+            $selected.parent().data('sb-saved-scrollTo', scrollTo);
+        }
+    }
+
     // Sync custom display with original select box and set selected class and the correct <li>
     var updateSelect = function() {
       var $this = $(this),
@@ -19,7 +40,9 @@
       if (this.selectedIndex != -1) {
         $sbSelect.val(this[this.selectedIndex].innerHTML);
       
-        $dropdown.children().removeClass('selected').eq(this.selectedIndex).addClass('selected');
+        var $selected = $dropdown.children().removeClass('selected').eq(this.selectedIndex).addClass('selected');
+
+        scrollToSelected();
       }
     };
 
@@ -60,9 +83,11 @@
           
       clearKeyStrokes();
 
-      $('.sb-dropdown').filter('[data-id!=' + id + ']').fadeOut('fast');
-      $('.sb-dropdown').filter('[data-id=' + id + ']').fadeIn('fast');
-      
+      $('.sb-dropdown[data-id!=' + id + ']').fadeOut('fast');
+      $('.sb-dropdown[data-id=' + id + ']').fadeIn('fast');
+
+      scrollToSelected();
+
       e.preventDefault();
     };
     
@@ -82,10 +107,7 @@
       //select in dropdown if it's open... else directly change select value to target element
       function softSelect(el) {
           if($current.is(':hidden')) $(el).trigger('click');
-          else {
-            $current.removeClass('selected');
-            $(el).addClass('selected').trigger('click', true);
-          }
+          else $(el).addClass('selected').trigger('click', true);
       }
 
       if (e.keyCode >= 48 && e.keyCode <= 90) {
