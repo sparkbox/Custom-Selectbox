@@ -119,7 +119,7 @@
         if(!matchString.replace(new RegExp(matchString[0],"g"), '').length) matchFirstChar = true;
 
         $current.siblings('li').andSelf().children('a').each(function() {
-            if (this.innerHTML.toUpperCase().indexOf(matchFirstChar ? matchString[0] : matchString) === 0) {
+            if ($.trim(this.innerHTML.toUpperCase()).indexOf(matchFirstChar ? matchString[0] : matchString) === 0) {
                 matches.push(this);
             }
         });
