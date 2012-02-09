@@ -25,7 +25,7 @@
     };
 
     // Update original select box, hide <ul>, and fire change event to keep everything in sync
-    var dropdownSelection = function(e) {
+    var dropdownSelection = function(e, preventClose) {
       e.preventDefault();
       var $target = $(this).children('li').andSelf().filter($(e.target).parents('li').andSelf()).filter('li');
       if(!$target.length) return true;
@@ -34,8 +34,10 @@
           $option = $('.sb-custom[data-id=' + id + ']').find('option').filter('[value="' + $target.data('value') + '"]');
       
       $option[0].selected = true;
-      $target.parent().fadeOut('fast');
-      $option.parent().trigger('change');
+      if(!preventClose) {
+          hideDropdown({});
+          $option.parent().trigger('change');
+      } else $option.trigger('sb-sync');
     };
     
     // Create the <ul> that will be used to change the selection on a non iOS/Android browser
@@ -67,9 +69,10 @@
     
     // Hide the custom dropdown
     var hideDropdown = function(e) {
-      if (!$(e.target).closest('.sb-custom').length) {
-        $('.sb-dropdown').fadeOut('fast');
-      }
+        var id = $(e.target).closest('.sb-dropdown').add($(e.target).closest('.sb-custom')).data('id'),
+            $prevent = $('.sb-dropdown[data-id=' + id + ']');
+
+        $('.sb-dropdown').not($prevent).fadeOut('fast');
     };
 
     // Manage keypress to replicate browser functionality
@@ -82,7 +85,7 @@
           if($current.is(':hidden')) $(el).trigger('click');
           else {
             $current.removeClass('selected');
-            $(el).addClass('selected');
+            $(el).addClass('selected').trigger('click', true);
           }
       }
 
