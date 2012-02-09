@@ -138,7 +138,11 @@
       }
 
       function nextPage(elements) {
-        $current.parent().show();
+        var hideAfter = false;
+        if($current.is(':hidden')) {
+            $current.parent().show();
+            hideAfter = true;
+        }
         var targetDistance = $current.parent().innerHeight()-($current.outerHeight()*2),
             distance = 0,
             $target = $(elements).last();
@@ -150,7 +154,7 @@
                 return false;
             }
         });
-        $current.parent().hide();
+        if(hideAfter) $current.parent().hide();
         softSelect($target);
       }
 
