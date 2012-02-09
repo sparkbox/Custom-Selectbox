@@ -23,17 +23,18 @@
           .filter(':contains(' + this[this.selectedIndex].innerHTML + ')').addClass('selected');
       }
     };
-    
+
     // Update original select box, hide <ul>, and fire change event to keep everything in sync
     var dropdownSelection = function(e) {
-      var $target = $(e.target),
-          id = $target.closest('ul').attr('data-id'),
-          $option = $('.sb-custom[data-id=' + id + ']').find('option').filter('[value="' + $target.parent().data('value') + '"]');
-          
       e.preventDefault();
+      var $target = $(this).children('li').andSelf().filter($(e.target).parents('li').andSelf()).filter('li');
+      if(!$target.length) return true;
+
+      var id = $target.parent().attr('data-id'),
+          $option = $('.sb-custom[data-id=' + id + ']').find('option').filter('[value="' + $target.data('value') + '"]');
       
       $option[0].selected = true;
-      $target.closest('ul').fadeOut('fast');
+      $target.parent().fadeOut('fast');
       $option.parent().trigger('change');
     };
     
@@ -78,7 +79,7 @@
 
       //select in dropdown if it's open... else directly change select value to target element
       function softSelect(el) {
-          if($current.is(':hidden')) $(el).children('a').trigger('click');
+          if($current.is(':hidden')) $(el).trigger('click');
           else {
             $current.removeClass('selected');
             $(el).addClass('selected');
@@ -121,7 +122,7 @@
       }
 
       if ((e.keyCode == TAB  && $current.is(':visible')) || e.keyCode == RETURN || e.keyCode == SPACE || e.keyCode == ESC) {
-        $current.children('a').trigger('click');
+        $current.trigger('click');
         e.preventDefault();
         return;
       }
