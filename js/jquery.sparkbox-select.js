@@ -19,8 +19,7 @@
       if (this.selectedIndex != -1) {
         $sbSelect.val(this[this.selectedIndex].innerHTML);
       
-        $dropdown.children().removeClass('selected')
-          .filter(':contains(' + this[this.selectedIndex].innerHTML + ')').addClass('selected');
+        $dropdown.children().removeClass('selected').eq(this.selectedIndex).addClass('selected');
       }
     };
 
