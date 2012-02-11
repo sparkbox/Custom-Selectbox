@@ -29,6 +29,23 @@
         $dropdown.data('sb-saved-scrollTo', $dropdown.scrollTop());
     }
 
+    var fixDropdownPositions = function(element) {
+        if (settings.appendTo) {
+            var $elements = $(element).is('.sb-dropdown') ? $(element) : $('.sb-dropdown:visible');
+
+            $elements.each(function() {
+                var $sbCustom = $(this).data('sb-custom'),
+                    offset = $sbCustom.offset();
+
+                $(this).css({
+                    'top': offset.top,
+                    'left': offset.left,
+                    'width': $sbCustom.width() * 0.8
+                });
+            });
+        }
+    }
+
     // Sync custom display with original select box and set selected class and the correct <li>
     var updateSelect = function(select) {
       var $select = this === window ? $(select) : $(this),
@@ -81,6 +98,7 @@
       clearKeyStrokes();
 
       hideDropdown({target: $dropdown});
+      fixDropdownPositions($dropdown);
       $dropdown.addClass('active').stop().fadeTo('fast', 1);
 
       scrollToSelected($dropdown, true);
@@ -232,13 +250,7 @@
         if (!settings.appendTo) {
             $sbCustom.append($sbCustom.data('sb-dropdown'));
         } else {
-          var offset = $self.parent().offset();
-
-          $(settings.appendTo).append($sbCustom.data('sb-dropdown').css({
-            'top': offset.top,
-            'left': offset.left,
-            'width': $self.parent().width() * 0.8
-          }));
+            $(settings.appendTo).append($sbCustom.data('sb-dropdown'));
         }
 
         $self.data('lastVal', $self.val());
@@ -256,6 +268,7 @@
         .delegate('.sb-dropdown', 'focus', viewList)
         .delegate('.sb-dropdown', 'click', dropdownSelection)
         .delegate('.sb-select', 'focusout', keepFocus);
+    $(window).bind('resize', fixDropdownPositions);
 
     return this;
   };
