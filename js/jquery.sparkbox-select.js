@@ -5,8 +5,10 @@
         android = (navigator.userAgent.match(/Android/i)),
         LEFT = 37, UP = 38, RIGHT = 39, DOWN = 40, SPACE = 32, RETURN = 13, TAB = 9, ESC = 27, PGUP = 33, PGDOWN = 34,
         matchString = '',
+        visibleDropdowns = $(),
         settings = $.extend({
-          appendTo: false
+          appendTo: false,
+          pollPosition: false //Polling frequency in microsecounds (500-1000 should be enough), default false disableds polling. Use this option only if your selects position may change while dropdown is opened.
         }, options);
 
     var scrollToSelected = function($dropdown, recover) {
@@ -31,7 +33,7 @@
 
     var fixDropdownPositions = function(element) {
         if (settings.appendTo) {
-            var $elements = $(element).is('.sb-dropdown') ? $(element) : $('.sb-dropdown:visible');
+            var $elements = $(element).is('.sb-dropdown') ? $(element) : visibleDropdowns;
 
             $elements.each(function() {
                 var $sbCustom = $(this).data('sb-custom'),
@@ -99,6 +101,7 @@
 
       hideDropdown({target: $dropdown});
       fixDropdownPositions($dropdown);
+      visibleDropdowns = visibleDropdowns.add($dropdown);
       $dropdown.addClass('active').stop().fadeTo('fast', 1);
 
       scrollToSelected($dropdown, true);
@@ -111,7 +114,9 @@
         var $matches = $(e.target).closest('.sb-dropdown, .sb-custom'),
             $prevent = $matches.data('sb-dropdown') || $matches;
 
-        $('.sb-dropdown').not($prevent).removeClass('active').stop().fadeOut('fast');
+        $('.sb-dropdown').not($prevent).removeClass('active').stop().fadeOut('fast', function() {
+            visibleDropdowns = visibleDropdowns.not($(this));
+        });
     };
 
     var keepFocus = function() {
@@ -251,6 +256,13 @@
             $sbCustom.append($sbCustom.data('sb-dropdown'));
         } else {
             $(settings.appendTo).append($sbCustom.data('sb-dropdown'));
+            if(typeof(settings.pollPosition) === 'number') {
+                var callback = function() {
+                    fixDropdownPositions();
+                    window.setTimeout(callback, settings.pollPosition);
+                };
+                callback();
+            }
         }
 
         $self.data('lastVal', $self.val());
