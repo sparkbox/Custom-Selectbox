@@ -81,7 +81,7 @@
       clearKeyStrokes();
 
       hideDropdown({target: $dropdown});
-      $dropdown.fadeIn('fast');
+      $dropdown.addClass('active').stop().fadeTo('fast', 1);
 
       scrollToSelected($dropdown, true);
 
@@ -93,8 +93,12 @@
         var $matches = $(e.target).closest('.sb-dropdown, .sb-custom'),
             $prevent = $matches.data('sb-dropdown') || $matches;
 
-        $('.sb-dropdown').not($prevent).fadeOut('fast');
+        $('.sb-dropdown').not($prevent).removeClass('active').stop().fadeOut('fast');
     };
+
+    var keepFocus = function() {
+        if(($(this).parent().data('sb-dropdown').is('.active'))) $(this).focus();
+    }
 
     // Manage keypress to replicate browser functionality
     var selectKeypress = function(e) {
@@ -244,13 +248,14 @@
     });
     
     // Hide dropdown when click is outside of the input or dropdown
-    $(document).bind('click', hideDropdown)
+    $(document).bind('mousedown', hideDropdown)
         .delegate('.sb-custom', 'blur', clearKeyStrokes)
         .delegate('.sb-custom select', 'change', updateSelect)
         .delegate('.sb-select', 'keydown', selectKeypress)
         .delegate('.sb-select', 'click', viewList)
         .delegate('.sb-dropdown', 'focus', viewList)
-        .delegate('.sb-dropdown', 'click', dropdownSelection);
+        .delegate('.sb-dropdown', 'click', dropdownSelection)
+        .delegate('.sb-select', 'focusout', keepFocus);
 
     return this;
   };
