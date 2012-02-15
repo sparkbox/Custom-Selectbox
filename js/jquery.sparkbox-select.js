@@ -68,6 +68,7 @@
     // Update original select box, hide <ul>, and fire change event to keep everything in sync
     var dropdownSelection = function(e, preventClose) {
       e.preventDefault();
+      setFocus.call($(this).data('sb-custom'));
       var $target = $(e.target).parent('li').andSelf().filter('li');
       if(!$target.length) return true;
 
@@ -121,9 +122,9 @@
         });
     };
 
-    var keepFocus = function() {
-        if(($(this).parent().data('sb-dropdown').is('.active'))) $(this).focus();
-    }
+    var setFocus = function() {
+        $(this).children('input.sb-select').focus();
+    };
 
     // Manage keypress to replicate browser functionality
     var selectKeypress = function(e) {
@@ -276,12 +277,12 @@
     // Hide dropdown when click is outside of the input or dropdown
     $(document).bind('mousedown', hideDropdown)
         .delegate('.sb-custom', 'blur', clearKeyStrokes)
+        .delegate('.sb-custom', 'click', setFocus)
         .delegate('.sb-custom select', 'change', updateSelect)
         .delegate('.sb-select', 'keydown', selectKeypress)
         .delegate('.sb-select', 'click', viewList)
         .delegate('.sb-dropdown', 'focus', viewList)
-        .delegate('.sb-dropdown', 'click', dropdownSelection)
-        .delegate('.sb-select', 'focusout', keepFocus);
+        .delegate('.sb-dropdown', 'click', dropdownSelection);
     $(window).bind('resize', fixDropdownPositions);
 
     return this;
