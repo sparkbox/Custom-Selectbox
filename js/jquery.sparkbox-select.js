@@ -54,12 +54,12 @@
           $dropdown = $select.parent().data('sb-dropdown'),
           $sbSelect = $select.siblings('.sb-select');
 
-      if ($select.attr("selectedIndex") != -1) {
-        $sbSelect.val($select.children().eq($select.attr("selectedIndex")).html());
+      if ($select.prop("selectedIndex") != -1) {
+        $sbSelect.val($select.children().eq($select.prop("selectedIndex")).html());
 
         if($dropdown) {
             $dropdown.children('.selected').removeClass('selected');
-            $dropdown.children().eq($select.attr("selectedIndex")).addClass('selected');
+            $dropdown.children().eq($select.prop("selectedIndex")).addClass('selected');
             scrollToSelected($dropdown);
         }
       }
@@ -112,9 +112,11 @@
     // Hide the custom dropdown
     var hideDropdown = function(e) {
         var $matches = $(e.target).closest('.sb-dropdown, .sb-custom'),
-            $prevent = $matches.data('sb-dropdown') || $matches;
+            $prevent = $matches.data('sb-dropdown') || $matches,
+            $toHide = $('.sb-dropdown.active').not($prevent);
 
-        $('.sb-dropdown').not($prevent).removeClass('active').stop().fadeOut('fast', function() {
+        if($toHide.length && e.preventDefault) e.preventDefault();
+        $toHide.removeClass('active').stop().fadeOut('fast', function() {
             visibleDropdowns = visibleDropdowns.not($(this));
         });
     };
