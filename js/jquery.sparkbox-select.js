@@ -17,10 +17,10 @@
           $sbSelect = $this.siblings('.sb-select');
       
       if (this.selectedIndex != -1) {
-        $sbSelect.val(this[this.selectedIndex].innerHTML);
+        $sbSelect.val($(this[this.selectedIndex]).text());
       
         $dropdown.children().removeClass('selected')
-          .filter(':contains(' + this[this.selectedIndex].innerHTML + ')').addClass('selected');
+          .filter(':contains(' + $(this[this.selectedIndex]).text() + ')').addClass('selected');
       }
     };
     
