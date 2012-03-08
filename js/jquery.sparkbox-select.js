@@ -98,6 +98,9 @@
     var viewList = function(e) {
       var $dropdown = $(this).parent().data('sb-dropdown') || $(this);
 
+      //if it's already the active dropdown don't do anything
+      if($dropdown.is('.active')) return false;
+
       clearKeyStrokes();
 
       hideDropdown({target: $dropdown});
