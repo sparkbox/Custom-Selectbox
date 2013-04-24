@@ -18,9 +18,12 @@
       
       if (this.selectedIndex != -1) {
         $sbSelect.val(this[this.selectedIndex].innerHTML);
-      
+
+        var selIdxTxt = this[this.selectedIndex].innerHTML;
         $dropdown.children().removeClass('selected')
-          .filter(':contains(' + this[this.selectedIndex].innerHTML + ')').addClass('selected');
+          .filter(function(idx){
+                      return (selIdxTxt === this.children[0].innerHTML);
+                  }).addClass('selected');
       }
     };
     
