@@ -54,8 +54,14 @@
     // Clear keystroke matching string and show dropdown
     var viewList = function(e) {
       var $this = $(this),
-          id = $this.data('id');
-          
+          id = $this.data('id'),
+          $current = $('.sb-dropdown[data-id=' + $this.data('id') + ']').find('.selected');
+      if ($current.is(':visible')){
+        console.log("visible");
+        hideDropdown($current[0]);
+        return;
+      }
+
       clearKeyStrokes();
 
       $('.sb-dropdown').filter('[data-id!=' + id + ']').fadeOut('fast');
