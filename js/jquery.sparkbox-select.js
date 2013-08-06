@@ -186,7 +186,7 @@
     // Hide dropdown when click is outside of the input or dropdown
     $(document).bind('click', hideDropdown);
     
-    $('.sb-custom').find('.sb-select').live('keydown', selectKeypress);
+    $('.sb-custom').find('.sb-select').on('keydown', selectKeypress);
     $('.sb-custom').bind('blur', clearKeyStrokes);
     $(document).delegate('.sb-dropdown', 'focus', viewList);
     
