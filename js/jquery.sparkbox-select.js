@@ -54,8 +54,13 @@
     // Clear keystroke matching string and show dropdown
     var viewList = function(e) {
       var $this = $(this),
-          id = $this.data('id');
-          
+          id = $this.data('id'),
+          $current = $('.sb-dropdown[data-id=' + $this.data('id') + ']').find('.selected');
+      if ($current.is(':visible')){
+        hideDropdown($current[0]);
+        return;
+      }
+
       clearKeyStrokes();
 
       $('.sb-dropdown').filter('[data-id!=' + id + ']').fadeOut('fast');
@@ -186,7 +191,7 @@
     // Hide dropdown when click is outside of the input or dropdown
     $(document).bind('click', hideDropdown);
     
-    $('.sb-custom').find('.sb-select').live('keydown', selectKeypress);
+    $('.sb-custom').find('.sb-select').on('keydown', selectKeypress);
     $('.sb-custom').bind('blur', clearKeyStrokes);
     $(document).delegate('.sb-dropdown', 'focus', viewList);
     
