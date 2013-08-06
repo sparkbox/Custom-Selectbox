@@ -57,7 +57,6 @@
           id = $this.data('id'),
           $current = $('.sb-dropdown[data-id=' + $this.data('id') + ']').find('.selected');
       if ($current.is(':visible')){
-        console.log("visible");
         hideDropdown($current[0]);
         return;
       }
