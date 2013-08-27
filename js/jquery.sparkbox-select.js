@@ -130,6 +130,14 @@
       matchString = '';
     };
     
+    var sizeDropdown = function($self, offset) {
+      return {
+            'top': offset.top,
+            'left': offset.left,
+            'width': $self.parent().width() * 0.8
+      };
+    }
+
     
     
     /* jQuery Plugin Loop
@@ -169,13 +177,10 @@
         if (!settings.appendTo) {
           $self.after(createDropdown($self, selectboxCounter));
         } else {
-          var offset = $self.parent().offset();
-          
-          $(settings.appendTo).append(createDropdown($self, selectboxCounter).css({
-            'top': offset.top,
-            'left': offset.left,
-            'width': $self.parent().width() * 0.8
-          }));
+          var offset = $self.parent().offset(); 
+
+          $(settings.appendTo).append(createDropdown($self, selectboxCounter).css(sizeDropdown($self, offset)));
+
         }
       }
 
@@ -189,6 +194,15 @@
     $('.sb-custom').find('.sb-select').live('keydown', selectKeypress);
     $('.sb-custom').bind('blur', clearKeyStrokes);
     $(document).delegate('.sb-dropdown', 'focus', viewList);
+
+    //Window resize, recalculate offset of abs position select box, -PKS 2013
+    $(window).resize(function() {
+      $(".sparkbox-custom").each(function(i, e){
+        var $self = $(e);
+        var offset = $self.parent().offset();
+        $('.sb-dropdown[data-id="'+ i + '"]').css(sizeDropdown($self, offset));
+      });
+    });
     
     return this;
   };
