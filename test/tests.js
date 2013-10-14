@@ -43,8 +43,8 @@ $(document).ready(function() {
     $originalSelect.val('foxfire').trigger('change');
     
     equal($originalSelect.val(), 'foxfire', 'The original select is set correctly');
-    equal($sbDropdown.find('.selected').data('value'), 'foxfire', 'The dropdown is set correctly');
-    
+    equal($sbDropdown.find('.selected').data('sb-option').attr('value'), 'foxfire', 'The dropdown is set correctly');
+
     $sbDropdown.find('a').eq(0).trigger('click');  
   });
   
