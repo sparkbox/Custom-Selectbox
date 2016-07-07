@@ -1,0 +1,5 @@
+.sb-select--dropdown {
+  display: none; }
+
+.sb-select--open {
+  display: initial; }

@@ -1,0 +1,40 @@
+{
+  "name": "sb-select",
+  "version": "1.0.0",
+  "description": "This is a UI replacement for default select boxes that leaves mobile browsers (iOS and Android) default UI intact.",
+  "main": "webpack.config.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "lodash.defaults": "^4.0.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.10.4",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.9.0",
+    "chokidar": "^1.6.0",
+    "concurrently": "^2.2.0",
+    "jasmine": "^2.4.1",
+    "node-sass": "^3.8.0",
+    "shelljs": "^0.7.0",
+    "webpack": "^1.13.1"
+  },
+  "scripts": {
+    "start": "node scripts/start.js",
+    "watch": "node scripts/watch.js",
+    "test": "jasmine",
+    "scss": "node-sass --output dist/css src/scss/*.scss",
+    "scss-watch": "node-sass --watch --output dist/css src/scss/*.scss"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sparkbox/Custom-Selectbox.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sparkbox/Custom-Selectbox/issues"
+  },
+  "homepage": "https://github.com/sparkbox/Custom-Selectbox#readme"
+}

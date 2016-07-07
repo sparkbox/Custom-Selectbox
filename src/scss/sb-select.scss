@@ -1,0 +1,16 @@
+// Hide the original select box
+.sb-select--original {
+  // opacity: 0;
+}
+
+.sb-select--input {
+
+}
+
+.sb-select--dropdown {
+  display: none;
+
+}
+.sb-select--open {
+  display: initial;
+}
